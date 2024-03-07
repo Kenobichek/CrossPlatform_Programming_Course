@@ -9,3 +9,4 @@ set(CMAKE_BUILD_TYPE Debug)
 # Include sub-projects.
 add_subdirectory ("lab1")
 add_subdirectory ("lab2")
+add_subdirectory ("lab4")
