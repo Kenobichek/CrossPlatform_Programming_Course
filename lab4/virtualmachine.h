@@ -1,35 +1,33 @@
 #pragma once
-#include <QCoreApplication>
-#include <QDebug>
 
-enum Bytecode {
-    LOAD,
-    ADD,
-    STORE
-};
+#include <QObject>
+#include <QDebug>
+#include <vector>
 
 class VirtualMachine : public QObject {
     Q_OBJECT
 public:
-    explicit VirtualMachine(QObject *parent = nullptr) : QObject(parent), accumulator(0), memory(0) {}
+    explicit VirtualMachine(QObject *parent = nullptr) : QObject(parent) {}
 
-    void execute(Bytecode bytecode) {
-        switch (bytecode) {
-            case LOAD:
-                qDebug() << "LOAD operation executed.";
-                accumulator = 0;
-                break;
-            case ADD:
-                qDebug() << "ADD operation executed.";
-                accumulator += 1;
-                break;
-            case STORE:
-                qDebug() << "STORE operation executed.";
-                memory = accumulator;
-                break;
-            default:
-                qCritical() << "Unknown bytecode encountered.";
-                break;
+    void execute(const std::vector<int>& bytecode) {
+        for (const int& instruction : bytecode) {
+            switch (instruction) {
+                case 0x00:
+                    qDebug() << "0x00 operation executed: LOAD.";
+                    accumulator = 0;
+                    break;
+                case 0x01:
+                    qDebug() << "0x01 operation executed: ADD.";
+                    accumulator += 1;
+                    break;
+                case 0x02:
+                    qDebug() << "0x02 operation executed: STORE.";
+                    memory = accumulator;
+                    break;
+                default:
+                    qCritical() << "Unknown bytecode encountered: " << instruction;
+                    break;
+            }
         }
     }
 
@@ -38,6 +36,6 @@ public:
     }
 
 private:
-    int accumulator;
-    int memory;
+    int accumulator = -1;
+    int memory = -1;
 };
